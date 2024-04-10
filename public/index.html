@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Concurrent Transactions</title>
+</head>
+<body>
+  <h1>Data Item: <span id="dataItem">initial</span></h1>
+  <form action="/update" method="POST">
+    <input type="text" name="value" placeholder="New Value">
+    <button type="submit">Update</button>
+  </form>
+  <script>
+    setInterval(() => {
+      fetch('/read')
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById('dataItem').innerText = data;
+        });
+    }, 1000);
+  </script>
+</body>
+</html>

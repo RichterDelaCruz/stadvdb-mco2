@@ -77,7 +77,14 @@ app.post('/connect', (req, res) => {
     connection.query('SELECT * FROM appointments_ndb WHERE apptid = ?', [apptId], (err, results) => {
       if (err) {
         console.error('Error executing MySQL query:', err);
-        return res.status(500).send('Error executing MySQL query');
+        // Render the search page with an error message
+        return res.render('search', { error: 'An error occurred while executing the query. Please try again.' });
+      }
+
+      // Check if the query returned no results
+      if (results.length === 0) {
+        // Render the search page with an error message indicating the appointment ID was not found
+        return res.render('search', { error: 'No appointment found with the provided ID. Please try again.' });
       }
 
       // Log the entire row corresponding to the appointment ID

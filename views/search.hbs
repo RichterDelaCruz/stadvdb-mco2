@@ -10,6 +10,10 @@
 
 <body>
     <h1>Search Appointments</h1>
+    <!-- Display error message if it exists -->
+    {{#if error}}
+    <p style="color: red;">{{error}}</p>
+    {{/if}}
     <form action="/search" method="post">
         <label for="apptId">Appointment ID:</label>
         <input type="text" id="apptId" name="apptId">

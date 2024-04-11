@@ -5,94 +5,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointment Details</title>
+    <!-- Include Bootstrap CSS from CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
-    <h1>Appointment Details</h1>
-    <form action="/update" method="POST">
-        <input type="hidden" name="apptId" value="{{ appointment.apptid }}">
-        <ul>
-            <li>
-                Appointment ID: <input type="text" name="apptid" value="{{ appointment.apptid }}" readonly>
-            </li>
-            <li>
-                Patient ID: <input type="text" name="pxid" value="{{ appointment.pxid }}">
-            </li>
-            <li>
-                Doctor ID: <input type="text" name="doctorid" value="{{ appointment.doctorid }}">
-            </li>
-            <li>
-                Clinic ID: <input type="text" name="clinicid" value="{{ appointment.clinicid }}">
-            </li>
-            <li>
-                Status: <input type="text" name="status" value="{{ appointment.status }}">
-            </li>
-            <li>
-                Time Queued: <input type="datetime-local" name="timeQueued" value="{{ appointment.timeQueued }}">
-            </li>
-            <li>
-                Queue Date: <input type="datetime-local" name="queueDate" value="{{ appointment.queueDate }}">
-            </li>
-            <li>
-                Start Time: <input type="datetime-local" name="startTime" value="{{ appointment.startTime }}">
-            </li>
-            <li>
-                End Time: <input type="datetime-local" name="endTime" value="{{ appointment.endTime }}">
-            </li>
-            <li>
-                Type: <input type="text" name="type" value="{{ appointment.type }}">
-            </li>
-            <li>
-                Hospital Name: <input type="text" name="hospitalName" value="{{ appointment.hospitalName }}">
-            </li>
-            <li>
-                Is Hospital:
-                {{#ifCond appointment.isHospital '===' 1}}
-                <input type="checkbox" name="isHospital" value="1" checked>
-                {{else}}
-                <input type="checkbox" name="isHospital" value="1">
-                {{/ifCond}}
-            </li>
-            <li>
-                City: <input type="text" name="city" value="{{ appointment.city }}">
-            </li>
-            <li>
-                Province: <input type="text" name="province" value="{{ appointment.province }}">
-            </li>
-            <li>
-                Region: <input type="text" name="regionName" value="{{ appointment.regionName }}">
-            </li>
-            <li>
-                Doctor Main Speciality: <input type="text" name="doctorMainSpeciality"
-                    value="{{ appointment.doctorMainSpeciality }}">
-            </li>
-            <li>
-                Doctor Age: <input type="number" name="doctorAge" value="{{ appointment.doctorAge }}">
-            </li>
-            <li>
-                Patient Age: <input type="number" name="pxAge" value="{{ appointment.pxAge }}">
-            </li>
-            <li>
-                Patient Gender:
-                <select name="pxGender">
-                    <option value="MALE" {{#ifCond appointment.pxGender '===' 'MALE' }}>selected{{/ifCond}}>Male
-                    </option>
-                    <option value="FEMALE" {{#ifCond appointment.pxGender '===' 'FEMALE' }}>selected{{/ifCond}}>Female
-                    </option>
-                </select>
-            </li>
-            <li>
-                Virtual: <input type="checkbox" name="virtual" value="1" {{#ifCond appointment.virtual '==='
-                    1}}checked{{/ifCond}}>
-            </li>
-        </ul>
-        <button type="submit">Save Changes</button>
-    </form>
+    <div class="container mt-5">
+        <h1>Appointment Details</h1>
+        <form action="/update" method="POST">
+            <input type="hidden" name="apptId" value="{{ appointment.apptid }}">
 
-    <form action="/delete" method="POST">
-        <input type="hidden" name="apptId" value="{{ appointment.apptid }}">
-        <button type="submit">Delete Appointment</button>
-    </form>
+            <div class="form-group">
+                <label>Appointment ID:</label>
+                <input type="text" class="form-control" value="{{ appointment.apptid }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Patient ID:</label>
+                <input type="text" name="pxid" class="form-control" value="{{ appointment.pxid }}">
+            </div>
+
+            <div class="form-group">
+                <label>Doctor ID:</label>
+                <input type="text" name="doctorid" class="form-control" value="{{ appointment.doctorid }}">
+            </div>
+
+            <div class="form-group">
+                <label>Clinic ID:</label>
+                <input type="text" name="clinicid" class="form-control" value="{{ appointment.clinicid }}">
+            </div>
+
+            <div class="form-group">
+                <label>Status:</label>
+                <input type="text" name="status" class="form-control" value="{{ appointment.status }}">
+            </div>
+
+            <div class="form-group">
+                <label>Time Queued:</label>
+                <input type="datetime-local" name="timeQueued" class="form-control" value="{{ appointment.timeQueued }}">
+            </div>
+
+            <div class="form-group">
+                <label>Queue Date:</label>
+                <input type="datetime-local" name="queueDate" class="form-control" value="{{ appointment.queueDate }}">
+            </div>
+
+            <div class="form-group">
+                <label>Start Time:</label>
+                <input type="datetime-local" name="startTime" class="form-control" value="{{ appointment.startTime }}">
+            </div>
+
+            <div class="form-group">
+                <label>End Time:</label>
+                <input type="datetime-local" name="endTime" class="form-control" value="{{ appointment.endTime }}">
+            </div>
+
+            <div class="form-group">
+                <label>Type:</label>
+                <input type="text" name="type" class="form-control" value="{{ appointment.type }}">
+            </div>
+
+            <div class="form-group">
+                <label>Hospital Name:</label>
+                <input type="text" name="hospitalName" class="form-control" value="{{ appointment.hospitalName }}">
+            </div>
+
+            <div class="form-group">
+                <label>Is Hospital:</label>
+                <input type="checkbox" name="isHospital" value="1" {{#if appointment.isHospital}}checked{{/if}}>
+            </div>
+
+            <div class="form-group">
+                <label>City:</label>
+                <input type="text" name="city" class="form-control" value="{{ appointment.city }}">
+            </div>
+
+            <div class="form-group">
+                <label>Province:</label>
+                <input type="text" name="province" class="form-control" value="{{ appointment.province }}">
+            </div>
+
+            <div class="form-group">
+                <label>Region:</label>
+                <input type="text" name="regionName" class="form-control" value="{{ appointment.regionName }}">
+            </div>
+
+            <div class="form-group">
+                <label>Doctor Main Speciality:</label>
+                <input type="text" name="doctorMainSpeciality" class="form-control" value="{{ appointment.doctorMainSpeciality }}">
+            </div>
+
+            <div class="form-group">
+                <label>Doctor Age:</label>
+                <input type="number" name="doctorAge" class="form-control" value="{{ appointment.doctorAge }}">
+            </div>
+
+            <div class="form-group">
+                <label>Patient Age:</label>
+                <input type="number" name="pxAge" class="form-control" value="{{ appointment.pxAge }}">
+            </div>
+
+            <div class="form-group">
+                <label>Patient Gender:</label>
+                <select name="pxGender" class="form-control">
+                    <option value="MALE" {{#ifCond appointment.pxGender '===' 'MALE'}} selected {{/ifCond}}>Male</option>
+                    <option value="FEMALE" {{#ifCond appointment.pxGender '===' 'FEMALE'}} selected {{/ifCond}}>Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Virtual:</label>
+                <input type="checkbox" name="virtual" value="1" {{#if appointment.virtual}}checked{{/if}}>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+
+        <form action="/delete" method="POST" class="mt-2">
+            <input type="hidden" name="apptId" value="{{ appointment.apptid }}">
+            <button type="submit" class="btn btn-danger">Delete Appointment</button>
+        </form>
+    </div>
+    <!-- Optional: Include Bootstrap JS and its dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

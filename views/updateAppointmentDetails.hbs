@@ -42,11 +42,13 @@
 
             <div class="form-group">
                 <label>Time Queued:</label>
-                <input type="datetime-local" name="timeQueued" class="form-control" value="{{ appointment.timeQueued }}">
+                <input type="datetime-local" name="timeQueued" class="form-control"
+                    value="{{ appointment.timeQueued }}">
             </div>
 
             <div class="form-group">
                 <label>Queue Date:</label>
+                <!-- Insert the formatted datetime string here -->
                 <input type="datetime-local" name="queueDate" class="form-control" value="{{ appointment.queueDate }}">
             </div>
 
@@ -92,7 +94,8 @@
 
             <div class="form-group">
                 <label>Doctor Main Speciality:</label>
-                <input type="text" name="doctorMainSpeciality" class="form-control" value="{{ appointment.doctorMainSpeciality }}">
+                <input type="text" name="doctorMainSpeciality" class="form-control"
+                    value="{{ appointment.doctorMainSpeciality }}">
             </div>
 
             <div class="form-group">
@@ -108,8 +111,10 @@
             <div class="form-group">
                 <label>Patient Gender:</label>
                 <select name="pxGender" class="form-control">
-                    <option value="MALE" {{#ifCond appointment.pxGender '===' 'MALE'}} selected {{/ifCond}}>Male</option>
-                    <option value="FEMALE" {{#ifCond appointment.pxGender '===' 'FEMALE'}} selected {{/ifCond}}>Female</option>
+                    <option value="MALE" {{#ifCond appointment.pxGender '===' 'MALE' }} selected {{/ifCond}}>Male
+                    </option>
+                    <option value="FEMALE" {{#ifCond appointment.pxGender '===' 'FEMALE' }} selected {{/ifCond}}>Female
+                    </option>
                 </select>
             </div>
 
@@ -131,34 +136,65 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-    function checkChanges() {
-        const form = document.getElementById('updateForm');
-        const inputs = form.querySelectorAll('input, select');
+        function checkChanges() {
+            const form = document.getElementById('updateForm');
+            const inputs = form.querySelectorAll('input, select');
 
-        let hasChanges = false;
+            let hasChanges = false;
 
-        inputs.forEach(input => {
-            if (input.type === 'datetime-local') {
-                // Get the initial value from a custom attribute
-                const initialValue = input.getAttribute('data-initial-value');
-                if (input.value !== initialValue) {
+            inputs.forEach(input => {
+                if (input.type === 'datetime-local') {
+                    // Get the initial value from a custom attribute
+                    const initialValue = input.getAttribute('data-initial-value');
+                    if (input.value !== initialValue) {
+                        hasChanges = true;
+                    }
+                } else if (input.type === 'checkbox' && input.checked !== input.defaultChecked) {
+                    hasChanges = true;
+                } else if (input.type !== 'checkbox' && input.value !== input.defaultValue) {
                     hasChanges = true;
                 }
-            } else if (input.type === 'checkbox' && input.checked !== input.defaultChecked) {
-                hasChanges = true;
-            } else if (input.type !== 'checkbox' && input.value !== input.defaultValue) {
-                hasChanges = true;
-            }
-        });
+            });
 
-        if (!hasChanges) {
-            alert('No changes made.');
-            return false;
+            if (!hasChanges) {
+                alert('No changes made.');
+                return false;
+            }
+
+            return true;
+        }
+        // Function to format datetime strings
+        function formatDatetime(datetime) {
+            // Parse the datetime string
+            const date = new Date(datetime);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const formattedDatetime = `${year}-${month}-${day}T${hours}:${minutes}`;
+            return formattedDatetime;
         }
 
-        return true;
-    }
-</script>
+        // Get the datetime-local input element
+        const queueDateInput = document.querySelector('input[name="queueDate"]');
+        const timeQueuedInput = document.querySelector('input[name="timeQueued"]');
+        const startTimeInput = document.querySelector('input[name="startTime"]');
+        const endTimeInput = document.querySelector('input[name="endTime"]');
+
+        // Get the appointment's queue date value
+        const appointmentQueueDate = '{{ appointment.queueDate }}'; // Replace with the actual value from your server
+        const appointmentTimeQueued = '{{ appointment.timeQueued }}'; // Replace with the actual value from your server
+        const appointmentStartTime = '{{ appointment.startTime }}'; // Replace with the actual value from your server
+        const appointmentEndTime = '{{ appointment.endTime }}'; // Replace with the actual value from your server
+
+
+        // Format the appointment's queue date and set it as the input value
+        queueDateInput.value = formatDatetime(appointmentQueueDate);
+        timeQueuedInput.value = formatDatetime(appointmentTimeQueued);
+        startTimeInput.value = formatDatetime(appointmentStartTime);
+        endTimeInput.value = formatDatetime(appointmentEndTime);
+    </script>
 
 </body>
 

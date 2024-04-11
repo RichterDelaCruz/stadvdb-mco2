@@ -27,6 +27,10 @@
         <li>Patient Gender: {{ appointment.pxGender }}</li>
         <li>Virtual: {{ appointment.virtual }}</li>
     </ul>
+    <!-- Add button to navigate to update page -->
+    <form action="/update/{{ appointment.apptid }}" method="GET">
+        <button type="submit">Update Appointment</button>
+    </form>
 </body>
 
 </html>

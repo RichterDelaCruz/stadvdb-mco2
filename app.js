@@ -1,8 +1,36 @@
+// Custom Handlebars helper function for conditional statements
+const ifCond = function (v1, operator, v2, options) {
+  switch (operator) {
+    case '===':
+      return (v1 === v2) ? options.fn(this) : options.inverse(this);
+    case '!==':
+      return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+    case '<':
+      return (v1 < v2) ? options.fn(this) : options.inverse(this);
+    case '<=':
+      return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+    case '>':
+      return (v1 > v2) ? options.fn(this) : options.inverse(this);
+    case '>=':
+      return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+    case '&&':
+      return (v1 && v2) ? options.fn(this) : options.inverse(this);
+    case '||':
+      return (v1 || v2) ? options.fn(this) : options.inverse(this);
+    default:
+      return options.inverse(this);
+  }
+};
+
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const path = require('path');
+
+// Register the ifCond helper with Handlebars
+const hbs = require('hbs');
+hbs.registerHelper('ifCond', ifCond);
 
 // Set Handlebars as the view engine
 app.set('view engine', 'hbs');
@@ -67,6 +95,87 @@ app.post('/connect', (req, res) => {
   // Define route for search page
   app.get('/search', (req, res) => {
     res.render('search');
+  });
+
+  // Define route to render the update page with the appointment details
+  app.get('/update/:apptId', (req, res) => {
+    const apptId = req.params.apptId;
+
+    // Query the database to retrieve the appointment details based on the appointment ID
+    connection.query('SELECT * FROM appointments_ndb WHERE apptid = ?', [apptId], (err, results) => {
+      if (err) {
+        console.error('Error executing MySQL query:', err);
+        return res.status(500).send('Error executing MySQL query');
+      }
+
+      // Render the update page with the appointment details
+      res.render('updateAppointmentDetails', { appointment: results[0] }); // Assuming there's only one appointment with the given ID
+    });
+  });
+
+  // Define route for updating appointment details
+  app.post('/update', (req, res) => {
+    const { apptId, pxid, doctorid, clinicid, status, timeQueued, queueDate, startTime, endTime, type, hospitalName, isHospital, city, province, regionName, doctorMainSpeciality, doctorAge, pxAge, pxGender, virtual } = req.body;
+    const updatedTimeQueued = req.body.timeQueued !== '' ? req.body.timeQueued : null;
+    const updatedQueueDate = req.body.queueDate !== '' ? req.body.queueDate : null;
+    const updatedStartTime = req.body.startTime !== '' ? req.body.startTime : null;
+    const updatedEndTime = req.body.endTime !== '' ? req.body.endTime : null;
+
+    // Construct the SQL query to update the appointment
+    const query = `
+      UPDATE appointments_ndb 
+      SET 
+          pxid = ?, 
+          doctorid = ?, 
+          clinicid = ?, 
+          status = ?, 
+          timeQueued = ?, 
+          queueDate = ?, 
+          startTime = ?, 
+          endTime = ?, 
+          type = ?, 
+          hospitalName = ?, 
+          isHospital = ?, 
+          city = ?, 
+          province = ?, 
+          regionName = ?, 
+          doctorMainSpeciality = ?, 
+          doctorAge = ?, 
+          pxAge = ?, 
+          pxGender = ?, 
+          \`virtual\` = ? 
+      WHERE 
+          apptid = ?`;
+
+    // Execute the query
+    connection.query(query, [pxid, doctorid, clinicid, status, updatedTimeQueued, updatedQueueDate, updatedStartTime, updatedEndTime, type, hospitalName, isHospital, city, province, regionName, doctorMainSpeciality, doctorAge, pxAge, pxGender, virtual, apptId], (err, result) => {
+      if (err) {
+        console.error('Error updating appointment:', err);
+        return res.status(500).send('Error updating appointment');
+      }
+      console.log('Appointment updated successfully');
+      // Redirect to the appointment details page
+      res.redirect('/');
+    });
+  });
+
+  // Define route for deleting appointments
+  app.post('/delete', (req, res) => {
+    const apptId = req.body.apptId;
+
+    // Construct the SQL query to delete the appointment
+    const query = 'DELETE FROM appointments_ndb WHERE apptid = ?';
+
+    // Execute the query
+    connection.query(query, [apptId], (err, result) => {
+      if (err) {
+        console.error('Error deleting appointment:', err);
+        return res.status(500).send('Error deleting appointment');
+      }
+      console.log('Appointment deleted successfully');
+      // Redirect to the index page or any other appropriate page
+      res.redirect('/');
+    });
   });
 
   // Define route for handling search request

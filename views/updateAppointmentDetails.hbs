@@ -12,7 +12,7 @@
 <body>
     <div class="container mt-5">
         <h1>Appointment Details</h1>
-        <form action="/update" method="POST">
+        <form id="updateForm" action="/update" method="POST" onsubmit="return checkChanges()">
             <input type="hidden" name="apptId" value="{{ appointment.apptid }}">
 
             <div class="form-group">
@@ -130,6 +130,36 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    function checkChanges() {
+        const form = document.getElementById('updateForm');
+        const inputs = form.querySelectorAll('input, select');
+
+        let hasChanges = false;
+
+        inputs.forEach(input => {
+            if (input.type === 'datetime-local') {
+                // Get the initial value from a custom attribute
+                const initialValue = input.getAttribute('data-initial-value');
+                if (input.value !== initialValue) {
+                    hasChanges = true;
+                }
+            } else if (input.type === 'checkbox' && input.checked !== input.defaultChecked) {
+                hasChanges = true;
+            } else if (input.type !== 'checkbox' && input.value !== input.defaultValue) {
+                hasChanges = true;
+            }
+        });
+
+        if (!hasChanges) {
+            alert('No changes made.');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+
 </body>
 
 </html>

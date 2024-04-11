@@ -60,7 +60,32 @@ app.post('/connect', (req, res) => {
       return res.status(500).send('Failed to connect to the selected node');
     }
     console.log('Connected to MySQL:', selectedNode);
-    res.send('Successfully connected to MySQL');
+    // Redirect to the search page
+    res.redirect('/search');
+  });
+
+  // Define route for search page
+  app.get('/search', (req, res) => {
+    res.render('search');
+  });
+
+  // Define route for handling search request
+  app.post('/search', (req, res) => {
+    const apptId = req.body.apptId;
+
+    // Query MySQL database to retrieve appointment details based on the appointment ID
+    connection.query('SELECT * FROM appointments_ndb WHERE apptid = ?', [apptId], (err, results) => {
+      if (err) {
+        console.error('Error executing MySQL query:', err);
+        return res.status(500).send('Error executing MySQL query');
+      }
+
+      // Log the entire row corresponding to the appointment ID
+      console.log('Appointment details:', results);
+
+      // Render a response with the appointment details
+      res.render('appointmentDetails', { appointment: results[0] }); // Assuming there's only one appointment with the given ID
+    });
   });
 });
 

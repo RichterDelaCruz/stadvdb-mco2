@@ -152,7 +152,7 @@ WHERE
     apptid = ?`;
 
     // Start a transaction
-    connection.beginTransaction((err) => {
+    connection.beginTransaction({ isolationLevel: 'SERIALIZABLE' }, (err) => {
       if (err) {
         console.error('Error starting transaction:', err);
         return res.status(500).send('Error starting transaction');
@@ -195,7 +195,7 @@ WHERE
     const query = 'DELETE FROM appointments_ndb WHERE apptid = ?';
 
     // Start a transaction
-    connection.beginTransaction((err) => {
+    connection.beginTransaction({ isolationLevel: 'SERIALIZABLE' }, (err) => {
       if (err) {
         console.error('Error starting transaction:', err);
         return res.status(500).send('Error starting transaction');

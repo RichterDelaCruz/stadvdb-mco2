@@ -127,42 +127,63 @@ app.post('/connect', (req, res) => {
 
     // Construct the SQL query to update the appointment
     const query = `
-    UPDATE appointments_ndb 
-    SET 
-        pxid = ?, 
-        doctorid = ?, 
-        clinicid = ?, 
-        status = ?, 
-        timeQueued = ?, 
-        queueDate = ?, 
-        startTime = ?, 
-        endTime = ?, 
-        type = ?, 
-        hospitalName = ?, 
-        isHospital = ?, 
-        city = ?, 
-        province = ?, 
-        regionName = ?, 
-        doctorMainSpeciality = ?, 
-        doctorAge = ?, 
-        pxAge = ?, 
-        pxGender = ?, 
-        \`virtual\` = ? 
-    WHERE 
-        apptid = ?`;
+UPDATE appointments_ndb 
+SET 
+    pxid = ?, 
+    doctorid = ?, 
+    clinicid = ?, 
+    status = ?, 
+    timeQueued = ?, 
+    queueDate = ?, 
+    startTime = ?, 
+    endTime = ?, 
+    type = ?, 
+    hospitalName = ?, 
+    isHospital = ?, 
+    city = ?, 
+    province = ?, 
+    regionName = ?, 
+    doctorMainSpeciality = ?, 
+    doctorAge = ?, 
+    pxAge = ?, 
+    pxGender = ?, 
+    \`virtual\` = ? 
+WHERE 
+    apptid = ?`;
 
-    // Add apptId to values array
-    values.push(apptId);
-
-    // Execute the query
-    connection.query(query, values, (err, result) => {
+    // Start a transaction
+    connection.beginTransaction((err) => {
       if (err) {
-        console.error('Error updating appointment:', err);
-        return res.status(500).send('Error updating appointment');
+        console.error('Error starting transaction:', err);
+        return res.status(500).send('Error starting transaction');
       }
-      console.log('Appointment updated successfully at Node:', selectedNode);
-      // Redirect to the appointment details page
-      res.redirect('/');
+
+      // Execute the query within the transaction
+      connection.query(query, [...values, apptId], (err, result) => {
+        if (err) {
+          // Rollback the transaction if an error occurs
+          console.error('Error updating appointment:', err);
+          connection.rollback(() => {
+            console.error('Transaction rolled back');
+            return res.status(500).send('Error updating appointment');
+          });
+        }
+
+        // Commit the transaction if the query is successful
+        connection.commit((err) => {
+          if (err) {
+            // Rollback the transaction if an error occurs during commit
+            console.error('Error committing transaction:', err);
+            connection.rollback(() => {
+              console.error('Transaction rolled back');
+              return res.status(500).send('Error updating appointment');
+            });
+          }
+          console.log('Appointment deleted successfully at Node:', selectedNode);
+          // Redirect to the appointment details page
+          res.redirect('/');
+        });
+      });
     });
   });
 
@@ -173,15 +194,39 @@ app.post('/connect', (req, res) => {
     // Construct the SQL query to delete the appointment
     const query = 'DELETE FROM appointments_ndb WHERE apptid = ?';
 
-    // Execute the query
-    connection.query(query, [apptId], (err, result) => {
+    // Start a transaction
+    connection.beginTransaction((err) => {
       if (err) {
-        console.error('Error deleting appointment:', err);
-        return res.status(500).send('Error deleting appointment');
+        console.error('Error starting transaction:', err);
+        return res.status(500).send('Error starting transaction');
       }
-      console.log('Appointment deleted successfully');
-      // Redirect to the index page or any other appropriate page
-      res.redirect('/');
+
+      // Execute the delete query within the transaction
+      connection.query(query, [apptId], (err, result) => {
+        if (err) {
+          // Rollback the transaction if an error occurs
+          console.error('Error deleting appointment:', err);
+          connection.rollback(() => {
+            console.error('Transaction rolled back');
+            return res.status(500).send('Error deleting appointment');
+          });
+        }
+
+        // Commit the transaction if the query is successful
+        connection.commit((err) => {
+          if (err) {
+            // Rollback the transaction if an error occurs during commit
+            console.error('Error committing transaction:', err);
+            connection.rollback(() => {
+              console.error('Transaction rolled back');
+              return res.status(500).send('Error deleting appointment');
+            });
+          }
+          console.log('Appointment deleted successfully at Node:', selectedNode);
+          // Redirect to the index page or any other appropriate page
+          res.redirect('/');
+        });
+      });
     });
   });
 
@@ -204,7 +249,6 @@ app.post('/connect', (req, res) => {
       }
 
       // Log the entire row corresponding to the appointment ID
-      console.log('Search results at Node:', selectedNode )
       console.log('Appointment details:', results);
 
       // Render a response with the appointment details

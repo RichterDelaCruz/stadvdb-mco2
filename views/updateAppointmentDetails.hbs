@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Details</title>
+</head>
+
+<body>
+    <h1>Appointment Details</h1>
+    <form action="/update" method="POST">
+        <input type="hidden" name="apptId" value="{{ appointment.apptid }}">
+        <ul>
+            <li>
+                Appointment ID: <input type="text" name="apptid" value="{{ appointment.apptid }}" readonly>
+            </li>
+            <li>
+                Patient ID: <input type="text" name="pxid" value="{{ appointment.pxid }}">
+            </li>
+            <li>
+                Doctor ID: <input type="text" name="doctorid" value="{{ appointment.doctorid }}">
+            </li>
+            <li>
+                Clinic ID: <input type="text" name="clinicid" value="{{ appointment.clinicid }}">
+            </li>
+            <li>
+                Status: <input type="text" name="status" value="{{ appointment.status }}">
+            </li>
+            <li>
+                Time Queued: <input type="datetime-local" name="timeQueued" value="{{ appointment.timeQueued }}">
+            </li>
+            <li>
+                Queue Date: <input type="datetime-local" name="queueDate" value="{{ appointment.queueDate }}">
+            </li>
+            <li>
+                Start Time: <input type="datetime-local" name="startTime" value="{{ appointment.startTime }}">
+            </li>
+            <li>
+                End Time: <input type="datetime-local" name="endTime" value="{{ appointment.endTime }}">
+            </li>
+            <li>
+                Type: <input type="text" name="type" value="{{ appointment.type }}">
+            </li>
+            <li>
+                Hospital Name: <input type="text" name="hospitalName" value="{{ appointment.hospitalName }}">
+            </li>
+            <li>
+                Is Hospital:
+                {{#ifCond appointment.isHospital '===' 1}}
+                <input type="checkbox" name="isHospital" value="1" checked>
+                {{else}}
+                <input type="checkbox" name="isHospital" value="1">
+                {{/ifCond}}
+            </li>
+            <li>
+                City: <input type="text" name="city" value="{{ appointment.city }}">
+            </li>
+            <li>
+                Province: <input type="text" name="province" value="{{ appointment.province }}">
+            </li>
+            <li>
+                Region: <input type="text" name="regionName" value="{{ appointment.regionName }}">
+            </li>
+            <li>
+                Doctor Main Speciality: <input type="text" name="doctorMainSpeciality"
+                    value="{{ appointment.doctorMainSpeciality }}">
+            </li>
+            <li>
+                Doctor Age: <input type="number" name="doctorAge" value="{{ appointment.doctorAge }}">
+            </li>
+            <li>
+                Patient Age: <input type="number" name="pxAge" value="{{ appointment.pxAge }}">
+            </li>
+            <li>
+                Patient Gender:
+                <select name="pxGender">
+                    <option value="MALE" {{#ifCond appointment.pxGender '===' 'MALE' }}>selected{{/ifCond}}>Male
+                    </option>
+                    <option value="FEMALE" {{#ifCond appointment.pxGender '===' 'FEMALE' }}>selected{{/ifCond}}>Female
+                    </option>
+                </select>
+            </li>
+            <li>
+                Virtual: <input type="checkbox" name="virtual" value="1" {{#ifCond appointment.virtual '==='
+                    1}}checked{{/ifCond}}>
+            </li>
+        </ul>
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <form action="/delete" method="POST">
+        <input type="hidden" name="apptId" value="{{ appointment.apptid }}">
+        <button type="submit">Delete Appointment</button>
+    </form>
+</body>
+
+</html>

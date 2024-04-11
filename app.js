@@ -160,7 +160,7 @@ app.post('/connect', (req, res) => {
         console.error('Error updating appointment:', err);
         return res.status(500).send('Error updating appointment');
       }
-      console.log('Appointment updated successfully');
+      console.log('Appointment updated successfully at Node:', selectedNode);
       // Redirect to the appointment details page
       res.redirect('/');
     });
@@ -204,6 +204,7 @@ app.post('/connect', (req, res) => {
       }
 
       // Log the entire row corresponding to the appointment ID
+      console.log('Search results at Node:', selectedNode )
       console.log('Appointment details:', results);
 
       // Render a response with the appointment details

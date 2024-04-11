@@ -116,13 +116,15 @@ app.post('/connect', (req, res) => {
   // Define route for updating appointment details
   app.post('/update', (req, res) => {
     const { apptId, pxid, doctorid, clinicid, status, timeQueued, queueDate, startTime, endTime, type, hospitalName, isHospital, city, province, regionName, doctorMainSpeciality, doctorAge, pxAge, pxGender, virtual } = req.body;
-    const updatedTimeQueued = req.body.timeQueued !== '' ? req.body.timeQueued : null;
-    const updatedQueueDate = req.body.queueDate !== '' ? req.body.queueDate : null;
-    const updatedStartTime = req.body.startTime !== '' ? req.body.startTime : null;
-    const updatedEndTime = req.body.endTime !== '' ? req.body.endTime : null;
+    // Check if the fields are undefined before assigning them
+    const updatedTimeQueued = typeof req.body.timeQueued !== 'undefined' ? req.body.timeQueued : null;
+    const updatedQueueDate = typeof req.body.queueDate !== 'undefined' ? req.body.queueDate : null;
+    const updatedStartTime = typeof req.body.startTime !== 'undefined' ? req.body.startTime : null;
+    const updatedEndTime = typeof req.body.endTime !== 'undefined' ? req.body.endTime : null;
+    const updatedIsHospital = typeof req.body.isHospital !== 'undefined' ? req.body.isHospital : null;
 
     // Replace empty string values with null
-    const fields = [pxid, doctorid, clinicid, status, updatedTimeQueued, updatedQueueDate, updatedStartTime, updatedEndTime, type, hospitalName, isHospital, city, province, regionName, doctorMainSpeciality, doctorAge, pxAge, pxGender, virtual];
+    const fields = [pxid, doctorid, clinicid, status, updatedTimeQueued, updatedQueueDate, updatedStartTime, updatedEndTime, type, hospitalName, updatedIsHospital, city, province, regionName, doctorMainSpeciality, doctorAge, pxAge, pxGender, virtual];
     const values = fields.map(value => (value === '' ? null : value));
 
     // Construct the SQL query to update the appointment

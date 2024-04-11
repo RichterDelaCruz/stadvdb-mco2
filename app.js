@@ -181,7 +181,7 @@ WHERE
               return res.status(500).send('Error updating appointment');
             });
           }
-          console.log('Appointment deleted successfully at Node:', selectedNode);
+          console.log('Appointment updated successfully at Node:', selectedNode);
           // Redirect to the appointment details page
           res.redirect('/');
         });

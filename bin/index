@@ -1,0 +1,144 @@
+<!-- view_appointment.hbs -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Appointment</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-form">
+        <h2>Search or Create Appointment</h2>
+        <form action="/appointments" method="get">
+            <label for="apptid">Appointment ID:</label>
+            <input type="text" id="apptid" name="apptid">
+            <button type="submit">Search</button>
+        </form>
+        <p>Don't have an Appointment ID? <a href="/appointments/new">Create New Appointment</a></p>
+    </div>
+
+    {{#if appointment}}
+
+    <h2>Appointment Details</h2>
+    <table>
+        <tr>
+            <th>Appointment ID</th>
+            <td>{{appointment.apptid}}</td>
+        </tr>
+        <tr>
+            <th>Patient ID</th>
+            <td>{{appointment.pxid}}</td>
+        </tr>
+        <tr>
+            <th>Doctor ID</th>
+            <td>{{appointment.doctorid}}</td>
+        </tr>
+        <tr>
+            <th>Clinic ID</th>
+            <td>{{appointment.clinicid}}</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>{{appointment.status}}</td>
+        </tr>
+        <tr>
+            <th>Time Queued</th>
+            <td>{{appointment.timeQueued}}</td>
+        </tr>
+        <tr>
+            <th>Queue Date</th>
+            <td>{{appointment.queueDate}}</td>
+        </tr>
+        <tr>
+            <th>Start Time</th>
+            <td>{{appointment.startTime}}</td>
+        </tr>
+        <tr>
+            <th>End Time</th>
+            <td>{{appointment.endTime}}</td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td>{{appointment.type}}</td>
+        </tr>
+        <tr>
+            <th>Hospital Name</th>
+            <td>{{appointment.hospitalName}}</td>
+        </tr>
+        <tr>
+            <th>Is Hospital</th>
+            <td>{{appointment.isHospital}}</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>{{appointment.city}}</td>
+        </tr>
+        <tr>
+            <th>Province</th>
+            <td>{{appointment.province}}</td>
+        </tr>
+        <tr>
+            <th>Region Name</th>
+            <td>{{appointment.regionName}}</td>
+        </tr>
+        <tr>
+            <th>Doctor Main Speciality</th>
+            <td>{{appointment.doctorMainSpeciality}}</td>
+        </tr>
+        <tr>
+            <th>Doctor Age</th>
+            <td>{{appointment.doctorAge}}</td>
+        </tr>
+        <tr>
+            <th>Patient Age</th>
+            <td>{{appointment.pxAge}}</td>
+        </tr>
+        <tr>
+            <th>Patient Gender</th>
+            <td>{{appointment.pxGender}}</td>
+        </tr>
+        <!-- Edit Button -->
+        <tr>
+            <td>
+                <a href="/appointments/{{appointment.apptid}}/edit">Edit Appointment</a>
+            </td>
+        </tr>
+        <!-- Delete Button -->
+        <tr>
+            <td>
+                <form action="/appointments/{{appointment.apptid}}" method="post">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete Appointment</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+    {{else}}
+    <p>No appointment found with the specified ID.</p>
+    {{/if}}
+
+    <!-- Back Button -->
+    <a href="/appointments">Back to Appointments</a>
+</body>
+
+</html>

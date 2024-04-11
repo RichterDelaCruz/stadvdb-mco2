@@ -121,34 +121,41 @@ app.post('/connect', (req, res) => {
     const updatedStartTime = req.body.startTime !== '' ? req.body.startTime : null;
     const updatedEndTime = req.body.endTime !== '' ? req.body.endTime : null;
 
+    // Replace empty string values with null
+    const fields = [pxid, doctorid, clinicid, status, updatedTimeQueued, updatedQueueDate, updatedStartTime, updatedEndTime, type, hospitalName, isHospital, city, province, regionName, doctorMainSpeciality, doctorAge, pxAge, pxGender, virtual];
+    const values = fields.map(value => (value === '' ? null : value));
+
     // Construct the SQL query to update the appointment
     const query = `
-      UPDATE appointments_ndb 
-      SET 
-          pxid = ?, 
-          doctorid = ?, 
-          clinicid = ?, 
-          status = ?, 
-          timeQueued = ?, 
-          queueDate = ?, 
-          startTime = ?, 
-          endTime = ?, 
-          type = ?, 
-          hospitalName = ?, 
-          isHospital = ?, 
-          city = ?, 
-          province = ?, 
-          regionName = ?, 
-          doctorMainSpeciality = ?, 
-          doctorAge = ?, 
-          pxAge = ?, 
-          pxGender = ?, 
-          \`virtual\` = ? 
-      WHERE 
-          apptid = ?`;
+    UPDATE appointments_ndb 
+    SET 
+        pxid = ?, 
+        doctorid = ?, 
+        clinicid = ?, 
+        status = ?, 
+        timeQueued = ?, 
+        queueDate = ?, 
+        startTime = ?, 
+        endTime = ?, 
+        type = ?, 
+        hospitalName = ?, 
+        isHospital = ?, 
+        city = ?, 
+        province = ?, 
+        regionName = ?, 
+        doctorMainSpeciality = ?, 
+        doctorAge = ?, 
+        pxAge = ?, 
+        pxGender = ?, 
+        \`virtual\` = ? 
+    WHERE 
+        apptid = ?`;
+
+    // Add apptId to values array
+    values.push(apptId);
 
     // Execute the query
-    connection.query(query, [pxid, doctorid, clinicid, status, updatedTimeQueued, updatedQueueDate, updatedStartTime, updatedEndTime, type, hospitalName, isHospital, city, province, regionName, doctorMainSpeciality, doctorAge, pxAge, pxGender, virtual, apptId], (err, result) => {
+    connection.query(query, values, (err, result) => {
       if (err) {
         console.error('Error updating appointment:', err);
         return res.status(500).send('Error updating appointment');

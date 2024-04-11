@@ -121,7 +121,7 @@ app.post('/connect', (req, res) => {
     const updatedQueueDate = typeof req.body.queueDate !== 'undefined' ? req.body.queueDate : null;
     const updatedStartTime = typeof req.body.startTime !== 'undefined' ? req.body.startTime : null;
     const updatedEndTime = typeof req.body.endTime !== 'undefined' ? req.body.endTime : null;
-    const updatedIsHospital = typeof req.body.isHospital !== 'undefined' ? req.body.isHospital : null;
+    const updatedIsHospital = typeof req.body.isHospital !== 'undefined' ? req.body.isHospital : 0;
 
     // Replace empty string values with null
     const fields = [pxid, doctorid, clinicid, status, updatedTimeQueued, updatedQueueDate, updatedStartTime, updatedEndTime, type, hospitalName, updatedIsHospital, city, province, regionName, doctorMainSpeciality, doctorAge, pxAge, pxGender, virtual];

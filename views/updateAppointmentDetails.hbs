@@ -127,7 +127,26 @@
         </form>
 
         <form action="/delete" method="POST" class="mt-2">
-            <input type="hidden" name="apptId" value="{{ appointment.apptid }}">
+            <input type="hidden" name="apptid" value="{{ appointment.apptid }}">
+            <input type="hidden" name="pxid" value="{{ appointment.pxid }}">
+            <input type="hidden" name="doctorid" value="{{ appointment.doctorid }}">
+            <input type="hidden" name="clinicid" value="{{ appointment.clinicid }}">
+            <input type="hidden" name="status" value="{{ appointment.status }}">
+            <input type="hidden" name="timeQueued" value="{{ appointment.timeQueued }}">
+            <input type="hidden" name="queueDate" value="{{ appointment.queueDate }}">
+            <input type="hidden" name="startTime" value="{{ appointment.startTime }}">
+            <input type="hidden" name="endTime" value="{{ appointment.endTime }}">
+            <input type="hidden" name="type" value="{{ appointment.type }}">
+            <input type="hidden" name="hospitalName" value="{{ appointment.hospitalName }}">
+            <input type="hidden" name="isHospital" value="{{ appointment.isHospital }}">
+            <input type="hidden" name="city" value="{{ appointment.city }}">
+            <input type="hidden" name="province" value="{{ appointment.province }}">
+            <input type="hidden" name="regionName" value="{{ appointment.regionName }}">
+            <input type="hidden" name="doctorMainSpeciality" value="{{ appointment.doctorMainSpeciality }}">
+            <input type="hidden" name="doctorAge" value="{{ appointment.doctorAge }}">
+            <input type="hidden" name="pxAge" value="{{ appointment.pxAge }}">
+            <input type="hidden" name="pxGender" value="{{ appointment.pxGender }}">
+            <input type="hidden" name="virtual" value="{{ appointment.virtual }}">
             <button type="submit" class="btn btn-danger">Delete Appointment</button>
         </form>
     </div>
